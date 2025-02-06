@@ -190,4 +190,10 @@ class Unet3D(nn.Module, ModelMixin):
                 h = up.upsample(h)
 
         # out
-        return self.out_layer(h)
+        h = self.out_layer(h)
+        # apply sigmoid to 4th channel rgba, to treat as air or solid
+        if h.shape[1] == 4:
+            h[:,3] = torch.sigmoid(h[:,3])
+            # > 0.5 is solid, < 0.5 is air
+            h[:,3] = (h[:,3] > 0.5).float()
+        return h
