@@ -19,3 +19,5 @@ from .model import (
 from .model_dit import DiT
 
 from .model_unet import Unet
+
+from .model_3Dunet import Unet3D

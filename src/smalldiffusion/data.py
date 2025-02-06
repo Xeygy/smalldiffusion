@@ -34,6 +34,9 @@ class DatasaurusDozen(Dataset):
 # Mainly used to discard labels and only output data
 class MappedDataset(Dataset):
     def __init__(self, dataset, fn):
+        '''
+        creates a dataset that applies fn to each item in dataset
+        '''
         self.dataset = dataset
         self.fn = fn
     def __len__(self):
