@@ -87,7 +87,7 @@ class Unet(nn.Module, ModelMixin):
                  ch_mult          = (1,2,2,2),
                  embed_ch_mult    = 4,
                  num_res_blocks   = 2,
-                 attn_resolutions = (16,),
+                 attn_resolutions = (16,), # which resolutions have attn in them
                  dropout          = 0.1,
                  resamp_with_conv = True,
                  sig_embed        = None,
@@ -191,4 +191,5 @@ class Unet(nn.Module, ModelMixin):
                 h = up.upsample(h)
 
         # out
-        return self.out_layer(h)
+        h = self.out_layer(h)
+        return h

@@ -68,7 +68,8 @@ class ScheduleCosine(Schedule):
         alpha_bar = lambda t: np.cos((t + 0.008) / 1.008 * np.pi / 2) ** 2
         betas = [min(1 - alpha_bar((i+1)/N)/alpha_bar(i/N), max_beta)
                  for i in range(N)]
-        super().__init__(sigmas_from_betas(torch.tensor(betas, dtype=torch.float32)))
+        sigmas = sigmas_from_betas(torch.tensor(betas, dtype=torch.float32))
+        super().__init__(sigmas)
 
 # Given a batch of data
 #   x0   : Either a data tensor or a tuple of (data, labels)
@@ -132,6 +133,7 @@ def samples(model      : nn.Module,
     if cond is not None:
         assert cond.shape[0] == xt.shape[0], 'cond must have same shape as x!'
         cond = cond.to(xt.device)
+    print("sample", xt.shape, xt.min(), xt.max())
     eps = None
     for i, (sig, sig_prev) in enumerate(pairwise(sigmas)):
         eps_prev, eps = eps, model.predict_eps_cfg(xt, sig.to(xt), cond, cfg_scale)
