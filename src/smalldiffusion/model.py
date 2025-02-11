@@ -9,8 +9,10 @@ from itertools import pairwise
 ## Basic functions used by all models
 
 class ModelMixin:
-    def rand_input(self, batchsize):
+    def rand_input(self, batchsize, fixed_seed=None):
         assert hasattr(self, 'input_dims'), 'Model must have "input_dims" attribute!'
+        if fixed_seed is not None:
+            torch.manual_seed(fixed_seed)
         return torch.randn((batchsize,) + self.input_dims)
 
     # Currently predicts eps, override following methods to predict, for example, x0

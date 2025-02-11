@@ -126,10 +126,11 @@ def samples(model      : nn.Module,
             batchsize  : int = 1,
             xt         : Optional[torch.FloatTensor] = None,
             cond       : Optional[torch.Tensor] = None,
-            accelerator: Optional[Accelerator] = None):
+            accelerator: Optional[Accelerator] = None,
+            fixed_seed : Optional[int] = None):
     model.eval()
     accelerator = accelerator or Accelerator()
-    xt = model.rand_input(batchsize).to(accelerator.device) * sigmas[0] if xt is None else xt
+    xt = model.rand_input(batchsize, fixed_seed).to(accelerator.device) * sigmas[0] if xt is None else xt
     if cond is not None:
         assert cond.shape[0] == xt.shape[0], 'cond must have same shape as x!'
         cond = cond.to(xt.device)
